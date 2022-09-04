@@ -95,7 +95,7 @@ Prefix that is used for the git tag  (optional). Example:
 ```
 
 #### **tag-suffix:**
-Prefix that is used for the git tag  (optional). Example:
+Suffix that is used for the git tag  (optional). Example:
 ```yaml
 - name:  'Automated Version Bump'
   uses:  'phips28/gh-action-bump-version@master'
