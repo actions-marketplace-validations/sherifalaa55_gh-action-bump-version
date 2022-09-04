@@ -70,6 +70,10 @@ inputs:
     description: 'Set version bump ignore policy'
     default: 'all'
     required: false
+  override-tag:
+    description: 'Fix the tag version'
+    default: ''
+    required: false
   push:
     description: '[DEPRECATED] Set to false to skip pushing the new tag'
     default: 'true'

@@ -187,6 +187,9 @@ const workspace = process.env.GITHUB_WORKSPACE;
       newVersion = newVersion + `-${tagSuffix}`;
     }
     if (process.env['INPUT_SKIP-COMMIT'] !== 'true') {
+      if (process.env['INPUT_OVERRIDE-TAG']) {
+        newVersion = process.env['INPUT_OVERRIDE-TAG'];
+      }
       await runInWorkspace('git', ['commit', '-a', '-m', commitMessage.replace(/{{version}}/g, newVersion)]);
     }
 
@@ -213,6 +216,9 @@ const workspace = process.env.GITHUB_WORKSPACE;
     try {
       // to support "actions/checkout@v1"
       if (process.env['INPUT_SKIP-COMMIT'] !== 'true') {
+        if (process.env['INPUT_OVERRIDE-TAG']) {
+          newVersion = process.env['INPUT_OVERRIDE-TAG'];
+        }
         await runInWorkspace('git', ['commit', '-a', '-m', commitMessage.replace(/{{version}}/g, newVersion)]);
       }
     } catch (e) {
@@ -224,6 +230,9 @@ const workspace = process.env.GITHUB_WORKSPACE;
 
     const remoteRepo = `https://${process.env.GITHUB_ACTOR}:${process.env.GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
     if (process.env['INPUT_SKIP-TAG'] !== 'true') {
+      if (process.env['INPUT_OVERRIDE-TAG']) {
+        newVersion = process.env['INPUT_OVERRIDE-TAG'];
+      }
       await runInWorkspace('git', ['tag', newVersion]);
       if (process.env['INPUT_SKIP-PUSH'] !== 'true') {
         await runInWorkspace('git', ['push', remoteRepo, '--follow-tags']);
