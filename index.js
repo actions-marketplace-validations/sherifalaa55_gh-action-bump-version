@@ -26,6 +26,7 @@ const workspace = process.env.GITHUB_WORKSPACE;
     return;
   }
 
+  const tagSuffix = process.env['INPUT_TAG-SUFFIX'];
   const versionType = process.env['INPUT_VERSION-TYPE'];
   const tagPrefix = process.env['INPUT_TAG-PREFIX'] || '';
   console.log('tagPrefix:', tagPrefix);
@@ -182,6 +183,9 @@ const workspace = process.env.GITHUB_WORKSPACE;
     let newVersion = execSync(`npm version --git-tag-version=false ${version}`).toString().trim().replace(/^v/, '');
     console.log('newVersion 1:', newVersion);
     newVersion = `${tagPrefix}${newVersion}`;
+    if (tagSuffix) {
+      newVersion = newVersion + `-${tagSuffix}`;
+    }
     if (process.env['INPUT_SKIP-COMMIT'] !== 'true') {
       await runInWorkspace('git', ['commit', '-a', '-m', commitMessage.replace(/{{version}}/g, newVersion)]);
     }
@@ -201,6 +205,9 @@ const workspace = process.env.GITHUB_WORKSPACE;
     newVersion = newVersion.split(/\n/)[1] || newVersion;
     console.log('newVersion 2:', newVersion);
     newVersion = `${tagPrefix}${newVersion}`;
+    if (tagSuffix) {
+      newVersion = newVersion + `-${tagSuffix}`;
+    }
     console.log(`newVersion after merging tagPrefix+newVersion: ${newVersion}`);
     console.log(`::set-output name=newTag::${newVersion}`);
     try {
